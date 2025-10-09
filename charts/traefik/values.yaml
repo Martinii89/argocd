@@ -1,0 +1,60 @@
+traefik:
+  # -- Email address used for Let's Encrypt registration. Replace with a valid mailbox before enabling in production.
+  certificatesResolvers:
+    le:
+      acme:
+        email: m4rtini89@gmail.com
+        storage: /data/acme.json
+        httpChallenge:
+          entryPoint: web
+
+  # -- Persist ACME certificates to survive pod restarts.
+  persistence:
+    enabled: true
+    storageClass: local-path
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    path: /data
+
+  # -- Expose Traefik via a LoadBalancer and redirect HTTP to HTTPS.
+  service:
+    type: LoadBalancer
+
+  ports:
+    web:
+      expose:
+        default: true
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+    websecure:
+      expose:
+        default: true
+      tls:
+        enabled: true
+        certResolver: le
+
+  # -- Reduce log noise while keeping access logs available for troubleshooting.
+  logs:
+    general:
+      level: WARN
+    access:
+      enabled: true
+
+  # -- Expose the Traefik dashboard on a TLS-secured endpoint for verification.
+  ingressRoute:
+    dashboard:
+      enabled: true
+      matchRule: Host(`traefik.martinn.no`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+      entryPoints:
+        - websecure
+      middlewares: []
+      tls:
+        certResolver: le
+
+  # -- Disable phone-home checks since ArgoCD keeps chart upgrades under control.
+  global:
+    checkNewVersion: false
+    sendAnonymousUsage: false

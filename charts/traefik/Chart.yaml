@@ -1,0 +1,9 @@
+apiVersion: v2
+name: traefik
+description: Umbrella chart that deploys Traefik as the cluster ingress controller.
+type: application
+version: 1.0.0
+dependencies:
+  - name: traefik
+    version: 37.1.2
+    repository: https://traefik.github.io/charts
