@@ -1,0 +1,41 @@
+{{- $ing := .Values.argocd.ingressRoute -}}
+{{- if $ing.enabled }}
+{{- $host := $ing.host | default "argocd.example.com" -}}
+{{- $entryPoints := $ing.entryPoints | default (list "websecure") -}}
+{{- $match := $ing.matchRule | default (printf "Host(`%s`)" $host) -}}
+{{- $service := $ing.service | default dict -}}
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "traefik.fullname" . }}-argocd
+  namespace: {{ $service.namespace | default "argocd" }}
+  labels:
+    app.kubernetes.io/name: {{ include "traefik.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/part-of: argocd
+spec:
+  entryPoints:
+{{- range $entryPoints }}
+    - {{ . }}
+{{- end }}
+  routes:
+    - match: {{ $match }}
+      kind: Rule
+      services:
+        - kind: Service
+          name: {{ $service.name | default "argo-cd-argocd-server" }}
+          namespace: {{ $service.namespace | default "argocd" }}
+          port: {{ $service.port | default 80 }}
+      {{- with $ing.middlewares }}
+      middlewares:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+  tls:
+{{- if $ing.tls }}
+{{ toYaml $ing.tls | indent 4 }}
+{{- else if $ing.certResolver }}
+    certResolver: {{ $ing.certResolver }}
+{{- end }}
+
+{{- end }}

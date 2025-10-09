@@ -5,6 +5,20 @@ dashboard:
     - websecure
   certResolver: le
 
+argocd:
+  ingressRoute:
+    enabled: true
+    host: gitops.martinn.no
+    entryPoints:
+      - websecure
+    middlewares: []
+    service:
+      name: argo-cd-argocd-server
+      namespace: default
+      port: 80
+    tls:
+      certResolver: le
+
 traefik:
   # -- Email address used for Let's Encrypt registration. Replace with a valid mailbox before enabling in production.
   certificatesResolvers:
