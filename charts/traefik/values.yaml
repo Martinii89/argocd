@@ -1,3 +1,10 @@
+dashboard:
+  enabled: false
+  host: traefik.martinn.no
+  entryPoints:
+    - websecure
+  certResolver: le
+
 traefik:
   # -- Email address used for Let's Encrypt registration. Replace with a valid mailbox before enabling in production.
   certificatesResolvers:
@@ -20,6 +27,7 @@ traefik:
   service:
     type: LoadBalancer
 
+  # -- Keep the API available; the dashboard route is managed separately and can be toggled via `.dashboard.enabled`.
   additionalArguments:
     - "--api=true"
     - "--api.dashboard=true"
@@ -47,16 +55,10 @@ traefik:
     access:
       enabled: true
 
-  # -- Expose the Traefik dashboard on a TLS-secured endpoint for verification.
+  # -- Leave the bundled dashboard route disabled; we manage exposure via a custom template.
   ingressRoute:
     dashboard:
-      enabled: true
-      matchRule: Host(`traefik.martinn.no`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
-      entryPoints:
-        - websecure
-      middlewares: []
-      tls:
-        certResolver: le
+      enabled: false
 
   # -- Disable phone-home checks since ArgoCD keeps chart upgrades under control.
   global:
