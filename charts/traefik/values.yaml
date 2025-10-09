@@ -20,6 +20,10 @@ traefik:
   service:
     type: LoadBalancer
 
+  additionalArguments:
+    - "--api=true"
+    - "--api.dashboard=true"
+
   ports:
     web:
       expose:
