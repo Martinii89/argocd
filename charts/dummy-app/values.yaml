@@ -1,0 +1,23 @@
+nameOverride: ""
+fullnameOverride: ""
+replicaCount: 2
+image:
+  repository: gcr.io/google-samples/hello-app
+  tag: "1.0"
+  pullPolicy: IfNotPresent
+podAnnotations: {}
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+traefik:
+  host: dummytest.martinn.no
+  entryPoints:
+    - websecure
+  middlewares: []
+  tls:
+    certResolver: le
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
