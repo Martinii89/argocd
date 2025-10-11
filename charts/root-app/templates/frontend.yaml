@@ -33,7 +33,7 @@ spec:
             - ../../../envs/{{"{{env}}"}}/values/{{"{{app}}"}}.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{"{{destinationNamespace}}"}} 
+    namespace: '{{"{{destinationNamespace}}"}}' 
   syncPolicy:
     automated:
       selfHeal: true
