@@ -29,7 +29,7 @@ spec:
         targetRevision: HEAD
         path: "charts/{{`{{.app}}`}}" 
         helm:
-           releaseName: "{{`{{.app}}-{{.env}}`}}"
+          releaseName: "{{`{{.app}}-{{.env}}`}}"
           valueFiles:
             - "envs/{{`{{.env}}`}}/values/{{`{{.app}}`}}.yaml"
       destination:
