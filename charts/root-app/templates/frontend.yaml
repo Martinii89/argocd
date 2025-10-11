@@ -21,20 +21,20 @@ spec:
                 - app: frontend
   template:
     metadata:
-      name: '{{.app}}-{{.env}}'
+      name: '{{app}}-{{env}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/Martinii89/argocd.git
         targetRevision: HEAD
-        path: 'charts/{{.app}}' 
+        path: 'charts/{{app}}' 
         helm:
-          releaseName: '{{.app}}-{{.env}}'
+          releaseName: '{{app}}-{{env}}'
           valueFiles:
-            - '../../../envs/{{.env}}/values/{{.app}}.yaml'
+            - '../../../envs/{{env}}/values/{{app}}.yaml'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.destinationNamespace}}'
+        namespace: '{{destinationNamespace}}'
   syncPolicy:
     automated:
       selfHeal: true
