@@ -32,9 +32,9 @@ spec:
           releaseName: '{{.app}}-{{.env}}'
           valueFiles:
             - '../../../envs/{{.env}}/values/{{.app}}.yaml'
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: '{{.destinationNamespace}}'
+        destination:
+          server: https://kubernetes.default.svc
+          namespace: '{{.destinationNamespace}}'
   syncPolicy:
     automated:
       selfHeal: true
