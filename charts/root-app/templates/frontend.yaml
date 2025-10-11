@@ -35,6 +35,11 @@ spec:
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{`{{.destinationNamespace}}`}}"
+      syncPolicy:
+        automated:
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
   syncPolicy:
     automated:
       selfHeal: true
