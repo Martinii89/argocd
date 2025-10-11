@@ -1,0 +1,4 @@
+image:
+  tag: "2.0"
+traefik:
+  host: staging-dummytest.martinn.no

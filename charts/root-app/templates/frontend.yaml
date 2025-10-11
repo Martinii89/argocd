@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: frontend-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - env: staging
+                  destinationNamespace: staging
+                - env: prod
+                  destinationNamespace: prod
+          - list:
+              elements:
+                - app: frontend
+  template:
+    metadata:
+      name: '{{app}}-{{env}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Martinii89/argocd.git
+        targetRevision: HEAD
+        path: charts/{{app}}
+        helm:
+          releaseName: '{{app}}-{{env}}'
+          valueFiles:
+            - ../../../envs/{{env}}/values/{{app}}.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{destinationNamespace}}
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
