@@ -1,0 +1,29 @@
+argo-cd:
+  namespace: argocd
+  global:
+    logging:
+      level: warn
+  configs:
+    params:
+      create: true
+      server.insecure: true
+  dex:
+    enabled: false
+  notifications:
+    enabled: false
+  applicationSet:
+    enabled: true
+  server:
+     insecure: true
+     ingress:
+       enabled: true
+       ingressClassName: nginx
+       hostname: gitops.martinn.no
+       tls:
+       - hosts:
+         - gitops.martinn.no
+       annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+
+

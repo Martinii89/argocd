@@ -1,20 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: traefik
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  name: infra-root
+  namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/Martinii89/argocd.git
-    path: charts/traefik
     targetRevision: HEAD
+    path: infra/appsets
   destination:
     server: https://kubernetes.default.svc
-    namespace: traefik
+    namespace: argocd
   syncPolicy:
-    automated:
-      selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true  
+    automated: 
+      prune: true 
+      selfHeal: true

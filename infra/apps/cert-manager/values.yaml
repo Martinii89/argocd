@@ -1,0 +1,18 @@
+cert-manager:
+  installCRDs: true
+  namespace: cert-manager
+
+  # Required only if you want to monitor cert-manager activity
+  prometheus:
+    enabled: false
+
+
+clusterIssuer:
+  enabled: true
+  name: letsencrypt-prod
+  email: m4rtini89@gmail.com
+  server: https://acme-v02.api.letsencrypt.org/directory
+  solvers:
+    - http01:
+        ingress:
+          class: nginx

@@ -1,0 +1,9 @@
+apiVersion: v2
+name: sealed-secrets
+description: Umbrella chart that deploys Sealed Secrets as a Kubernetes controller.
+type: application
+version: 1.0.0
+dependencies:
+  - name: sealed-secrets
+    version: 2.17.7
+    repository: https://bitnami-labs.github.io/sealed-secrets

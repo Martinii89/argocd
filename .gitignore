@@ -1,3 +1,16 @@
+# Helm build artifacts
+**/charts/*.tgz
+
+# Local tooling
+.env
+.idea/
+.vscode/
+
+# secrets
+kubeconfig
+secrets/*
+*kubeconfig*
 k3s.yaml
-charts/**/charts
-commands.md
+
+# Test files
+test*.yaml
