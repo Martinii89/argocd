@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "dummy-app.fullname" . }}-{{ now | date "20060102-150405" }}
+  labels:
+    {{- include "dummy-app.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-sync
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        {{- include "dummy-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}-init
+        image: busybox:latest
+        command: ["sh", "-c"]
+        args: ["echo 'Starting init job...'; sleep 10; echo 'Init job completed successfully'"]
+      restartPolicy: {{ .Values.job.restartPolicy | default "Never" }}
