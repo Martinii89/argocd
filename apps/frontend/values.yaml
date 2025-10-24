@@ -5,6 +5,13 @@ image:
   repository: gcr.io/google-samples/hello-app
   tag: "1.0"
   pullPolicy: IfNotPresent
+dbMigration:
+  image:
+    repository: busybox
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  command: ["sh", "-c"]
+  args: ["echo 'Starting DB migration...'; sleep 10; echo 'DB migration completed successfully'"]
 podAnnotations: {}
 service:
   type: ClusterIP
