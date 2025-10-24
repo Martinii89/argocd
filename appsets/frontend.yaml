@@ -14,7 +14,7 @@ spec:
               repoURL: https://github.com/Martinii89/argocd.git
               revision: HEAD
               directories:
-              - path: apps/*
+              - path: apps/frontend
           - list:
               elements:
                 - env: staging
