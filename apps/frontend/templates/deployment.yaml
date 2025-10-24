@@ -23,6 +23,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      initContainers:
+        - name: wait-for-migration
+          image: groundnuty/k8s-wait-for:v2.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "job"
+            - "{{ include "dummy-app.fullname" . }}-init-{{ .Values.dbMigration.image.tag | default "latest" | replace "." "-" }}"
       containers:
         - name: web
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
