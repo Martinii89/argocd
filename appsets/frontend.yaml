@@ -10,31 +10,33 @@ spec:
   generators:
     - matrix:
         generators:
+          - git:
+              repoURL: https://github.com/Martinii89/argocd.git
+              revision: HEAD
+              directories:
+              - path: apps/*
           - list:
               elements:
                 - env: staging
-                  destinationNamespace: staging
+                  destinationNamespace: dummytest-staging
                 - env: prod
-                  destinationNamespace: prod
-          - list:
-              elements:
-                - app: frontend
+                  destinationNamespace: dummytest-prod
   template:
     metadata:
-      name: "{{`{{.app}}-{{.env}}`}}"
+      name: '{{.path.basename}}-{{.env}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/Martinii89/argocd.git
         targetRevision: HEAD
-        path: "charts/{{`{{.app}}`}}" 
+        path: '{{.path.path}}'
         helm:
-          releaseName: "{{`{{.app}}-{{.env}}`}}"
+          releaseName: '{{.path.basename}}-{{.env}}'
           valueFiles:
-            - "../../envs/{{`{{.env}}`}}/values/{{`{{.app}}`}}.yaml"
+            - "../../envs/{{.env}}/values/{{.path.basename}}.yaml"
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{`{{.destinationNamespace}}`}}"
+        namespace: "{{.destinationNamespace}}"
       syncPolicy:
         automated:
           selfHeal: true
