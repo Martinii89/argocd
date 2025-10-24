@@ -1,5 +1,13 @@
 image:
   tag: "2.0"
 
-ingress.hosts[0].host: staging-dummytest.martinn.no
-ingress.tls[0].hosts[0]: staging-dummytest.martinn.no
+ingress:
+  hosts:
+    - host: staging-dummytest.martinn.no
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: staging-dummytest-tls
+      hosts:
+        - staging-dummytest.martinn.no

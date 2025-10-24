@@ -19,8 +19,8 @@ spec:
               elements:
                 - env: staging
                   destinationNamespace: dummytest-staging
-                # - env: prod
-                #   destinationNamespace: dummytest-prod
+                - env: prod
+                  destinationNamespace: dummytest-prod
   template:
     metadata:
       name: '{{.path.basename}}-{{.env}}'
