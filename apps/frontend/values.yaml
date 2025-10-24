@@ -8,10 +8,10 @@ image:
 dbMigration:
   image:
     repository: busybox
-    tag: "latest"
+    tag: "1.37"
     pullPolicy: IfNotPresent
   command: ["sh", "-c"]
-  args: ["echo 'Starting DB migration...'; sleep 10; echo 'DB migration completed successfully'"]
+  args: ["echo 'Starting DB migration...'; sleep 60; echo 'DB migration completed successfully'"]
 podAnnotations: {}
 service:
   type: ClusterIP
