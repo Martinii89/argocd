@@ -128,7 +128,7 @@ readinessProbe:
   httpGet:
     path: /lobby
     port: 8080
-  initialDelaySeconds: 15
+  initialDelaySeconds: 30
   periodSeconds: 10
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
