@@ -4,10 +4,6 @@ metadata:
   name: {{ include "dummy-app.fullname" . }}-{{ now | date "20060102-150405" }}
   labels:
     {{- include "dummy-app.labels" . | nindent 4 }}
-  annotations:
-    helm.sh/hook: pre-sync
-    helm.sh/hook-weight: "-1"
-    helm.sh/hook-delete-policy: before-hook-creation
 spec:
   backoffLimit: 1
   template:
