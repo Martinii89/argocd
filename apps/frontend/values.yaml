@@ -16,14 +16,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
   hosts:
-    - host: dummytest.bakkesplugins.com
+    - host: dummytest.martinn.no
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
    - secretName: dummytest-tls
      hosts:
-       - dummytest.bakkesplugins.com
+       - dummytest.martinn.no
 resources: {}
 nodeSelector: {}
 tolerations: []
