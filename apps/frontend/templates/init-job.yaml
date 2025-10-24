@@ -20,4 +20,4 @@ spec:
         image: busybox:latest
         command: ["sh", "-c"]
         args: ["echo 'Starting init job...'; sleep 10; echo 'Init job completed successfully'"]
-      restartPolicy: {{ .Values.job.restartPolicy | default "Never" }}
+      restartPolicy: {{ default "Never" (.Values.job).restartPolicy }}
