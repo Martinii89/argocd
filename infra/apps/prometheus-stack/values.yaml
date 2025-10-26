@@ -1,0 +1,11 @@
+kube-prometheus-stack:
+  namespaceOverride: monitoring
+  alertmanager:
+    alertmanagerSpec:
+      replicas: 1
+  grafana:
+    ingress:
+      enabled: false
+  prometheus:
+    prometheusSpec:
+      retention: 10d
