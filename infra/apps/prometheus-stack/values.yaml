@@ -1,24 +1,5 @@
-global:
-  # disable unnecessary global features
-  scrape_interval: 15s
 kube-prometheus-stack:
   namespaceOverride: monitoring
-  prometheus:
-    enabled: true
-    prometheusSpec:
-      replicas: 1
-      retention: 6h           # keep only 6 hours of metrics
-      resources:
-        requests:
-          memory: 200Mi
-          cpu: 100m
-        limits:
-          memory: 400Mi
-          cpu: 200m
-      ruleSelectorNilUsesHelmValues: false # disable default recording/alert rules
-      serviceMonitorSelector:
-        matchLabels:
-          metrics: "enabled"   # only scrape what we label manually
 
   alertmanager:
     enabled: false            # Lens doesn’t need alerts
@@ -28,15 +9,3 @@ kube-prometheus-stack:
 
   kubeStateMetrics:
     enabled: false            # not needed for CPU/mem metrics
-
-  nodeExporter:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-
-  # Only scrape kubelet cadvisor metrics for nodes
-  prometheusOperator:
-    serviceMonitorSelector:
-      matchLabels:
-        metrics: "enabled"
-
