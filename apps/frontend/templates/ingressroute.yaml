@@ -25,7 +25,7 @@ metadata:
         set $proxy_upstream_name "{{ $.Values.crawlerRouting.targetService.port }}-{{ $.Values.crawlerRouting.targetService.name }}";
         set $service_name "{{ $.Values.crawlerRouting.targetService.name }}";
         set $service_port "{{ $.Values.crawlerRouting.targetService.port }}";
-        rewrite ^/(.*)$ {{ $rewriteTarget }} break;
+        rewrite ^/(.*)$ {{ $rewriteTarget }} last;
       }
     {{- end }}
     {{- end }}
