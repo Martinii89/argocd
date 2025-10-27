@@ -1,77 +1,34 @@
 {{- if .Values.ingress.enabled -}}
-{{- if .Values.crawlerRouting.enabled -}}
 {{- $crawlerPattern := .Values.crawlerRouting.crawlerPatterns | default "" | replace "\r\n" "" | replace "\n" "" | replace "\r" "" | trim }}
-{{- $canaryHeader := .Values.crawlerRouting.canaryHeader | default "User-Agent" }}
 {{- $rewrite := .Values.crawlerRouting.rewrite | default dict -}}
 {{- $rewriteEnabled := $rewrite.enabled | default false -}}
 {{- $rewriteTarget := $rewrite.target | default "/api/preview/$1" -}}
----
-# Ingress for crawler traffic - routes to preview service
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ include "dummy-app.fullname" . }}-crawler
-  labels:
-    {{- include "dummy-app.labels" . | nindent 4 }}
-    app.kubernetes.io/component: crawler-routing
-  annotations:
-    {{- with .Values.ingress.annotations }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
-    nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-by-header: {{ $canaryHeader | quote }}
-    {{- if $crawlerPattern }}
-    nginx.ingress.kubernetes.io/canary-by-header-pattern: {{ $crawlerPattern | quote }}
-    {{- end }}
-    nginx.ingress.kubernetes.io/canary-weight: "0"
-    {{- if $rewriteEnabled }}
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite ^/(.*)$ /api/preview/$1 break;
-    {{- end }}
-spec:
-  {{- with .Values.ingress.className }}
-  ingressClassName: {{ . }}
-  {{- end }}
-  {{- if .Values.ingress.tls }}
-  tls:
-    {{- range .Values.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
-  {{- end }}
-  rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
-        paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
-            {{- end }}
-            backend:
-              service:
-                name: {{ $.Values.crawlerRouting.targetService.name }}
-                port:
-                  number: {{ $.Values.crawlerRouting.targetService.port }}
-          {{- end }}
-    {{- end }}
----
-{{- end }}
-# Main ingress for regular traffic
+# Main ingress with conditional routing based on User-Agent
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "dummy-app.fullname" . }}
   labels:
     {{- include "dummy-app.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+    {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
+    {{- if .Values.crawlerRouting.enabled }}
+    {{- if $rewriteEnabled }}
+    nginx.ingress.kubernetes.io/server-snippet: |
+      set $proxy_upstream_name "{{ $.Values.service.port }}-{{ include "dummy-app.fullname" $ }}";
+      set $service_name "{{ include "dummy-app.fullname" $ }}";
+      set $service_port "{{ $.Values.service.port }}";
+      
+      if ($http_user_agent {{ $crawlerPattern }}) {
+        set $proxy_upstream_name "{{ $.Values.crawlerRouting.targetService.port }}-{{ $.Values.crawlerRouting.targetService.name }}";
+        set $service_name "{{ $.Values.crawlerRouting.targetService.name }}";
+        set $service_port "{{ $.Values.crawlerRouting.targetService.port }}";
+        rewrite ^/(.*)$ {{ $rewriteTarget }} break;
+      }
+    {{- end }}
+    {{- end }}
 spec:
   {{- with .Values.ingress.className }}
   ingressClassName: {{ . }}
