@@ -3,6 +3,8 @@
 {{- $rewrite := .Values.crawlerRouting.rewrite | default dict -}}
 {{- $rewriteEnabled := $rewrite.enabled | default false -}}
 {{- $rewriteTarget := $rewrite.target | default "/api/preview/$1" -}}
+{{- $customHeaderName := .Values.crawlerRouting.customHeader.name | default "X-Crawler-Request" }}
+{{- $customHeaderValue := .Values.crawlerRouting.customHeader.value | default "true" }}
 # Main ingress with conditional routing based on User-Agent
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -25,7 +27,7 @@ metadata:
         set $proxy_upstream_name "{{ $.Values.crawlerRouting.targetService.port }}-{{ $.Values.crawlerRouting.targetService.name }}";
         set $service_name "{{ $.Values.crawlerRouting.targetService.name }}";
         set $service_port "{{ $.Values.crawlerRouting.targetService.port }}";
-        rewrite ^/(.*)$ {{ $rewriteTarget }} last;
+        more_set_headers "{{ $customHeaderName }}: {{ $customHeaderValue }}";
       }
     {{- end }}
     {{- end }}

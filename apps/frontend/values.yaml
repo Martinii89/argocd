@@ -52,10 +52,10 @@ crawlerRouting:
   # These patterns match common link preview bots
   crawlerPatterns: |
     ~*(facebookexternalhit|Facebot|Twitterbot|Discordbot|Slackbot|LinkedInBot|WhatsApp|TelegramBot|SkypeUriPreview|developers\.google\.com\/\+\/web\/snippet\/)
-  rewrite:
-    enabled: true
-    pattern: ^/(.*)
-    target: /api/preview/$1
+  # Custom header added to crawler requests so the application can detect and handle routing
+  customHeader:
+    name: "X-Crawler-Request"
+    value: "true"
   # Optional preview responder serving rich link metadata for crawlers
   previewResponder:
     enabled: false
