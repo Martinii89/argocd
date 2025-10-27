@@ -1,0 +1,66 @@
+{{- if and .Values.crawlerRouting.enabled .Values.crawlerRouting.echoServer.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dummy-app.fullname" . }}-preview-echo
+  labels:
+    {{- include "dummy-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: preview-echo
+spec:
+  replicas: {{ .Values.crawlerRouting.echoServer.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "dummy-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: preview-echo
+  template:
+    metadata:
+      labels:
+        {{- include "dummy-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: preview-echo
+    spec:
+      containers:
+      - name: echo-server
+        image: {{ .Values.crawlerRouting.echoServer.image }}
+        ports:
+        - containerPort: {{ .Values.crawlerRouting.echoServer.containerPort }}
+          name: http
+          protocol: TCP
+        env:
+        - name: PORT
+          value: {{ .Values.crawlerRouting.echoServer.containerPort | quote }}
+        {{- with .Values.crawlerRouting.echoServer.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.crawlerRouting.echoServer.resources | nindent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.crawlerRouting.targetService.name }}
+  labels:
+    {{- include "dummy-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: preview-echo
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.crawlerRouting.targetService.port }}
+    targetPort: {{ .Values.crawlerRouting.echoServer.containerPort }}
+    protocol: TCP
+    name: http
+  selector:
+    {{- include "dummy-app.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: preview-echo
+{{- end }}

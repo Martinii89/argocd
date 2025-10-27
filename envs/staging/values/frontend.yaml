@@ -11,3 +11,12 @@ ingress:
     - secretName: staging-dummytest-tls
       hosts:
         - staging-dummytest.martinn.no
+# Enable crawler routing in staging for testing
+crawlerRouting:
+  enabled: true
+  targetService:
+    name: preview-service  # Update this to your actual preview service name
+    port: 80
+  # Enable echo server for testing
+  echoServer:
+    enabled: true

@@ -35,3 +35,46 @@ resources: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+
+# Crawler routing configuration
+# When enabled, requests from link preview crawlers (Facebook, Twitter, Discord, etc.)
+# will be forwarded to a dedicated preview service instead of the Vue SPA
+crawlerRouting:
+  enabled: false
+  # The service to route crawler requests to
+  # This should be a service that generates proper meta tags for link previews
+  targetService:
+    name: preview-service
+    port: 80
+  # User-Agent patterns for crawlers (can be customized)
+  # These patterns match common link preview bots
+  crawlerPatterns: |
+    ~*(facebookexternalhit|Facebot|Twitterbot|Discordbot|Slackbot|LinkedInBot|WhatsApp|TelegramBot|SkypeUriPreview|developers\.google\.com\/\+\/web\/snippet\/)
+  # Echo server for testing crawler routing
+  # Enable this to deploy a simple echo server that shows request details
+  # Useful for verifying crawler routing is working before the real preview service is ready
+  echoServer:
+    enabled: false
+    replicaCount: 1
+    # Using ealen/echo-server - shows all request headers and details
+    # See: https://github.com/Ealenn/Echo-Server
+    image: ealen/echo-server:latest
+    containerPort: 80
+    # Optional environment variables for customization
+    env: []
+    # - name: ENABLE__ENVIRONMENT
+    #   value: "false"
+    # - name: ENABLE__HOST
+    #   value: "true"
+    # - name: ENABLE__HTTP
+    #   value: "true"
+    # - name: ENABLE__REQUEST
+    #   value: "true"
+    resources:
+      limits:
+        cpu: 50m
+        memory: 64Mi
+      requests:
+        cpu: 10m
+        memory: 32Mi

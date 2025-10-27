@@ -1,4 +1,57 @@
 {{- if .Values.ingress.enabled -}}
+{{- if .Values.crawlerRouting.enabled -}}
+---
+# Ingress for crawler traffic - routes to preview service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dummy-app.fullname" . }}-crawler
+  labels:
+    {{- include "dummy-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: crawler-routing
+  annotations:
+    {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    # Match crawler user agents and route to preview service
+    nginx.ingress.kubernetes.io/server-snippet: |
+      if ($http_user_agent {{ .Values.crawlerRouting.crawlerPatterns }}) {
+        set $proxy_upstream_name "{{ .Release.Namespace }}-{{ .Values.crawlerRouting.targetService.name }}-{{ .Values.crawlerRouting.targetService.port }}";
+      }
+spec:
+  {{- with .Values.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- with .pathType }}
+            pathType: {{ . }}
+            {{- end }}
+            backend:
+              service:
+                name: {{ $.Values.crawlerRouting.targetService.name }}
+                port:
+                  number: {{ $.Values.crawlerRouting.targetService.port }}
+          {{- end }}
+    {{- end }}
+---
+{{- end }}
+# Main ingress for regular traffic
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
