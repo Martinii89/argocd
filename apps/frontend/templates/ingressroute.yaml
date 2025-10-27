@@ -16,7 +16,7 @@ metadata:
     {{- end }}
     {{- if .Values.crawlerRouting.enabled }}
     {{- if $rewriteEnabled }}
-    nginx.ingress.kubernetes.io/server-snippet: |
+    nginx.ingress.kubernetes.io/configuration-snippet: |
       set $proxy_upstream_name "{{ $.Values.service.port }}-{{ include "dummy-app.fullname" $ }}";
       set $service_name "{{ include "dummy-app.fullname" $ }}";
       set $service_port "{{ $.Values.service.port }}";
