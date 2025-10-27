@@ -23,6 +23,7 @@ metadata:
     {{- if $crawlerPattern }}
     nginx.ingress.kubernetes.io/canary-by-header-pattern: {{ $crawlerPattern | quote }}
     {{- end }}
+    nginx.ingress.kubernetes.io/canary-weight: "0"
     {{- if $rewriteEnabled }}
     nginx.ingress.kubernetes.io/rewrite-target: {{ $rewriteTarget | quote }}
     {{- end }}
