@@ -25,6 +25,7 @@ metadata:
     {{- end }}
     nginx.ingress.kubernetes.io/canary-weight: "0"
     {{- if $rewriteEnabled }}
+    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: {{ $rewriteTarget | quote }}
     {{- end }}
 spec:
@@ -47,10 +48,8 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
-            {{- end }}
+          - path: {{- if $rewriteEnabled }} "/(.*)" {{- else }} {{ .path }} {{- end }}
+            pathType: {{- if $rewriteEnabled }} ImplementationSpecific {{- else }} {{- with .pathType }} {{ . }} {{- end }} {{- end }}
             backend:
               service:
                 name: {{ $.Values.crawlerRouting.targetService.name }}
