@@ -17,6 +17,12 @@ crawlerRouting:
   targetService:
     name: preview-service  # Update this to your actual preview service name
     port: 80
-  # Enable echo server for testing
-  echoServer:
+  previewResponder:
     enabled: true
+    page:
+      title: "Dummy App (Staging)"
+      description: "Latest staging build of Dummy App for link preview testing."
+      siteName: "Dummy App"
+      url: "https://staging-dummytest.martinn.no"
+      imageUrl: "https://hatrabbits.com/en/random-image/"
+      imageAlt: "Screenshot of Dummy App"

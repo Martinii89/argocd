@@ -52,26 +52,12 @@ crawlerRouting:
   # These patterns match common link preview bots
   crawlerPatterns: |
     ~*(facebookexternalhit|Facebot|Twitterbot|Discordbot|Slackbot|LinkedInBot|WhatsApp|TelegramBot|SkypeUriPreview|developers\.google\.com\/\+\/web\/snippet\/)
-  # Echo server for testing crawler routing
-  # Enable this to deploy a simple echo server that shows request details
-  # Useful for verifying crawler routing is working before the real preview service is ready
-  echoServer:
+  # Optional preview responder serving rich link metadata for crawlers
+  previewResponder:
     enabled: false
     replicaCount: 1
-    # Using ealen/echo-server - shows all request headers and details
-    # See: https://github.com/Ealenn/Echo-Server
-    image: ealen/echo-server:latest
-    containerPort: 80
-    # Optional environment variables for customization
-    env: []
-    # - name: ENABLE__ENVIRONMENT
-    #   value: "false"
-    # - name: ENABLE__HOST
-    #   value: "true"
-    # - name: ENABLE__HTTP
-    #   value: "true"
-    # - name: ENABLE__REQUEST
-    #   value: "true"
+    image: nginxinc/nginx-unprivileged:1.27.2-alpine
+    containerPort: 8080
     resources:
       limits:
         cpu: 50m
@@ -79,3 +65,14 @@ crawlerRouting:
       requests:
         cpu: 10m
         memory: 32Mi
+    page:
+      title: "Dummy App Preview"
+      description: "Experience the latest build of the Dummy App."
+      siteName: "Dummy App"
+      url: "https://dummytest.martinn.no"
+      imageUrl: ""
+      imageAlt: "Dummy App screenshot"
+      color: "#0ea5e9"
+      twitterCard: "summary_large_image"
+      refreshSeconds: 600
+      additionalMeta: []

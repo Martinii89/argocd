@@ -1,4 +1,4 @@
-{{- if and .Values.crawlerRouting.enabled .Values.crawlerRouting.echoServer.enabled -}}
+{{- if and .Values.crawlerRouting.enabled .Values.crawlerRouting.previewResponder.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,7 +7,7 @@ metadata:
     {{- include "dummy-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: preview-echo
 spec:
-  replicas: {{ .Values.crawlerRouting.echoServer.replicaCount }}
+  replicas: {{ .Values.crawlerRouting.previewResponder.replicaCount }}
   selector:
     matchLabels:
       {{- include "dummy-app.selectorLabels" . | nindent 6 }}
@@ -19,20 +19,19 @@ spec:
         app.kubernetes.io/component: preview-echo
     spec:
       containers:
-      - name: echo-server
-        image: {{ .Values.crawlerRouting.echoServer.image }}
+      - name: preview-responder
+        image: {{ .Values.crawlerRouting.previewResponder.image }}
+        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: {{ .Values.crawlerRouting.echoServer.containerPort }}
+        - containerPort: {{ .Values.crawlerRouting.previewResponder.containerPort }}
           name: http
           protocol: TCP
-        env:
-        - name: PORT
-          value: {{ .Values.crawlerRouting.echoServer.containerPort | quote }}
-        {{- with .Values.crawlerRouting.echoServer.env }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
         resources:
-          {{- toYaml .Values.crawlerRouting.echoServer.resources | nindent 10 }}
+          {{- toYaml .Values.crawlerRouting.previewResponder.resources | nindent 10 }}
+        volumeMounts:
+        - name: preview-page
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
         livenessProbe:
           httpGet:
             path: /
@@ -45,6 +44,10 @@ spec:
             port: http
           initialDelaySeconds: 5
           periodSeconds: 5
+      volumes:
+      - name: preview-page
+        configMap:
+          name: {{ include "dummy-app.fullname" . }}-preview-page
 ---
 apiVersion: v1
 kind: Service
@@ -57,7 +60,7 @@ spec:
   type: ClusterIP
   ports:
   - port: {{ .Values.crawlerRouting.targetService.port }}
-    targetPort: {{ .Values.crawlerRouting.echoServer.containerPort }}
+    targetPort: {{ .Values.crawlerRouting.previewResponder.containerPort }}
     protocol: TCP
     name: http
   selector:
