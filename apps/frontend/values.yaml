@@ -60,7 +60,7 @@ crawlerRouting:
   previewResponder:
     enabled: false
     replicaCount: 1
-    image: nginxinc/nginx-unprivileged:1.27.2-alpine
+    image: ealen/echo-server:latest
     containerPort: 8080
     resources:
       limits:
