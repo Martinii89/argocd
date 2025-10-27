@@ -27,7 +27,7 @@ metadata:
         set $proxy_upstream_name "{{ $.Values.crawlerRouting.targetService.port }}-{{ $.Values.crawlerRouting.targetService.name }}";
         set $service_name "{{ $.Values.crawlerRouting.targetService.name }}";
         set $service_port "{{ $.Values.crawlerRouting.targetService.port }}";
-        more_set_headers "{{ $customHeaderName }}: {{ $customHeaderValue }}";
+        more_set_input_headers "{{ $customHeaderName }}: {{ $customHeaderValue }}";
       }
     {{- end }}
     {{- end }}
