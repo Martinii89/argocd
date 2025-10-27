@@ -5,6 +5,9 @@ ingress-nginx:
     service:
       type: LoadBalancer
 
+    # Allow snippet annotations (required for advanced routing configurations)
+    allowSnippetAnnotations: true
+
     config:
       use-forwarded-headers: "true"
       compute-full-forwarded-for: "true"
