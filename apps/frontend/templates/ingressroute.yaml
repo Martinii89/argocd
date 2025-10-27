@@ -47,8 +47,10 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{- if $rewriteEnabled }} "/(.*)" {{- else }} {{ .path }} {{- end }}
-            pathType: {{- if $rewriteEnabled }} ImplementationSpecific {{- else }} {{- with .pathType }} {{ . }} {{- end }} {{- end }}
+          - path: {{ .path }}
+            {{- with .pathType }}
+            pathType: {{ . }}
+            {{- end }}
             backend:
               service:
                 name: {{ $.Values.crawlerRouting.targetService.name }}
