@@ -4,7 +4,6 @@
 {{- $canaryHeader := .Values.crawlerRouting.canaryHeader | default "User-Agent" }}
 {{- $rewrite := .Values.crawlerRouting.rewrite | default dict -}}
 {{- $rewriteEnabled := $rewrite.enabled | default false -}}
-{{- $rewritePattern := $rewrite.pattern | default "^/(.*)" -}}
 {{- $rewriteTarget := $rewrite.target | default "/api/preview/$1" -}}
 ---
 # Ingress for crawler traffic - routes to preview service
@@ -25,8 +24,7 @@ metadata:
     nginx.ingress.kubernetes.io/canary-by-header-pattern: {{ $crawlerPattern | quote }}
     {{- end }}
     {{- if $rewriteEnabled }}
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite {{ $rewritePattern }} {{ $rewriteTarget }} break;
+    nginx.ingress.kubernetes.io/rewrite-target: {{ $rewriteTarget | quote }}
     {{- end }}
 spec:
   {{- with .Values.ingress.className }}
@@ -48,10 +46,8 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
-            {{- end }}
+          - path: {{- if $rewriteEnabled }} "/(.*)" {{- else }} {{ .path }} {{- end }}
+            pathType: {{- if $rewriteEnabled }} ImplementationSpecific {{- else }} {{- with .pathType }} {{ . }} {{- end }} {{- end }}
             backend:
               service:
                 name: {{ $.Values.crawlerRouting.targetService.name }}
