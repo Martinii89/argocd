@@ -61,7 +61,7 @@ crawlerRouting:
     enabled: false
     replicaCount: 1
     image: ealen/echo-server:latest
-    containerPort: 8080
+    containerPort: 80
     resources:
       limits:
         cpu: 50m
