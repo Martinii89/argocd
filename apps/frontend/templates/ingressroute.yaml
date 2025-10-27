@@ -1,6 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- if .Values.crawlerRouting.enabled -}}
 {{- $crawlerPattern := .Values.crawlerRouting.crawlerPatterns | default "" | replace "\r\n" "" | replace "\n" "" | replace "\r" "" | trim }}
+{{- $canaryHeader := .Values.crawlerRouting.canaryHeader | default "User-Agent" }}
 ---
 # Ingress for crawler traffic - routes to preview service
 apiVersion: networking.k8s.io/v1
@@ -14,12 +15,10 @@ metadata:
     {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: {{ $canaryHeader | quote }}
     {{- if $crawlerPattern }}
-    # Match crawler user agents and route to preview service
-    nginx.ingress.kubernetes.io/server-snippet: |
-      if ($http_user_agent {{ $crawlerPattern }}) {
-        set $proxy_upstream_name "{{ .Release.Namespace }}-{{ .Values.crawlerRouting.targetService.name }}-{{ .Values.crawlerRouting.targetService.port }}";
-      }
+    nginx.ingress.kubernetes.io/canary-by-header-pattern: {{ $crawlerPattern | quote }}
     {{- end }}
 spec:
   {{- with .Values.ingress.className }}

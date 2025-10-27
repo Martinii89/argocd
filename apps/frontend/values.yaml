@@ -42,12 +42,13 @@ affinity: {}
 # will be forwarded to a dedicated preview service instead of the Vue SPA
 crawlerRouting:
   enabled: false
+  canaryHeader: "User-Agent"
   # The service to route crawler requests to
   # This should be a service that generates proper meta tags for link previews
   targetService:
     name: preview-service
     port: 80
-  # User-Agent patterns for crawlers (can be customized)
+  # User-Agent pattern used with the canary header matching (regex supported)
   # These patterns match common link preview bots
   crawlerPatterns: |
     ~*(facebookexternalhit|Facebot|Twitterbot|Discordbot|Slackbot|LinkedInBot|WhatsApp|TelegramBot|SkypeUriPreview|developers\.google\.com\/\+\/web\/snippet\/)
