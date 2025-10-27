@@ -52,6 +52,10 @@ crawlerRouting:
   # These patterns match common link preview bots
   crawlerPatterns: |
     ~*(facebookexternalhit|Facebot|Twitterbot|Discordbot|Slackbot|LinkedInBot|WhatsApp|TelegramBot|SkypeUriPreview|developers\.google\.com\/\+\/web\/snippet\/)
+  rewrite:
+    enabled: true
+    pattern: ^/(.*)
+    target: /api/preview/$1
   # Optional preview responder serving rich link metadata for crawlers
   previewResponder:
     enabled: false
