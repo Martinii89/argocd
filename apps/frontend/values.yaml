@@ -41,7 +41,7 @@ affinity: {}
 # When enabled, requests from link preview crawlers (Facebook, Twitter, Discord, etc.)
 # will be forwarded to a dedicated preview service instead of the Vue SPA
 crawlerRouting:
-  enabled: false
+  enabled: true
   canaryHeader: "User-Agent"
   # The service to route crawler requests to
   # This should be a service that generates proper meta tags for link previews
