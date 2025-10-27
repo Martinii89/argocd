@@ -18,17 +18,6 @@ metadata:
     {{- end }}
     {{- if .Values.crawlerRouting.enabled }}
     {{- if $rewriteEnabled }}
-    nginx.ingress.kubernetes.io/server-snippet: |
-      set $proxy_upstream_name "{{ $.Values.service.port }}-{{ include "dummy-app.fullname" $ }}";
-      set $service_name "{{ include "dummy-app.fullname" $ }}";
-      set $service_port "{{ $.Values.service.port }}";
-      
-      if ($http_user_agent {{ $crawlerPattern }}) {
-        set $proxy_upstream_name "{{ $.Values.crawlerRouting.targetService.port }}-{{ $.Values.crawlerRouting.targetService.name }}";
-        set $service_name "{{ $.Values.crawlerRouting.targetService.name }}";
-        set $service_port "{{ $.Values.crawlerRouting.targetService.port }}";
-        more_set_input_headers "{{ $customHeaderName }}: {{ $customHeaderValue }}";
-      }
     {{- end }}
     {{- end }}
 spec:
