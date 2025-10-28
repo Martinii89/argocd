@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "dummy-app.fullname" . }}-init-{{ .Values.dbMigration.image.tag | default "latest" | replace "." "-" }}
+  labels:
+    {{- include "dummy-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: init-job
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        {{- include "dummy-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: db-migration
+        image: "{{ .Values.dbMigration.image.repository }}:{{ .Values.dbMigration.image.tag | default "latest" }}"
+        imagePullPolicy: {{ .Values.dbMigration.image.pullPolicy }}
+        {{- if .Values.dbMigration.command }}
+        command: {{ toJson .Values.dbMigration.command }}
+        {{- end }}
+        {{- if .Values.dbMigration.args }}
+        args: {{ toJson .Values.dbMigration.args }}
+        {{- end }}
+      restartPolicy: {{ default "Never" (.Values.job).restartPolicy }}

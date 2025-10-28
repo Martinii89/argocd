@@ -1,0 +1,82 @@
+nameOverride: ""
+fullnameOverride: ""
+replicaCount: 2
+image:
+  repository: gcr.io/google-samples/hello-app
+  tag: "1.0"
+  pullPolicy: IfNotPresent
+dbMigration:
+  image:
+    repository: busybox
+    tag: "1.37"
+    pullPolicy: IfNotPresent
+  command: ["sh", "-c"]
+  args: ["echo 'Starting DB migration...'; sleep 60; echo 'DB migration completed successfully'"]
+podAnnotations: {}
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: dummytest.martinn.no
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+   - secretName: dummytest-tls
+     hosts:
+       - dummytest.martinn.no
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+
+# Crawler routing configuration
+# When enabled, requests from link preview crawlers (Facebook, Twitter, Discord, etc.)
+# will be forwarded to a dedicated preview service instead of the Vue SPA
+crawlerRouting:
+  enabled: true
+  canaryHeader: "User-Agent"
+  # The service to route crawler requests to
+  # This should be a service that generates proper meta tags for link previews
+  targetService:
+    name: preview-service
+    port: 80
+  # User-Agent pattern used with the canary header matching (regex supported)
+  # These patterns match common link preview bots
+  crawlerPatterns: |
+    ~*(facebookexternalhit|Facebot|Twitterbot|Discordbot|Slackbot|LinkedInBot|WhatsApp|TelegramBot|SkypeUriPreview|developers\.google\.com\/\+\/web\/snippet\/)
+  # Custom header added to crawler requests so the application can detect and handle routing
+  customHeader:
+    name: "X-Crawler-Request"
+    value: "true"
+  # Optional preview responder serving rich link metadata for crawlers
+  previewResponder:
+    enabled: false
+    replicaCount: 1
+    image: ealen/echo-server:latest
+    containerPort: 80
+    resources:
+      limits:
+        cpu: 50m
+        memory: 64Mi
+      requests:
+        cpu: 10m
+        memory: 32Mi
+    page:
+      title: "Dummy App Preview"
+      description: "Experience the latest build of the Dummy App."
+      siteName: "Dummy App"
+      url: "https://dummytest.martinn.no"
+      imageUrl: ""
+      imageAlt: "Dummy App screenshot"
+      color: "#0ea5e9"
+      twitterCard: "summary_large_image"
+      refreshSeconds: 600
+      additionalMeta: []

@@ -1,0 +1,24 @@
+{{- if and .Values.crawlerRouting.enabled .Values.crawlerRouting.previewResponder.enabled -}}
+{{- $page := .Values.crawlerRouting.previewResponder.page | default dict -}}
+{{- $title := default "Preview" $page.title -}}
+{{- $description := default "" $page.description -}}
+{{- $siteName := default "" $page.siteName -}}
+{{- $url := default "" $page.url -}}
+{{- $imageUrl := default "" $page.imageUrl -}}
+{{- $imageAlt := default "" $page.imageAlt -}}
+{{- $color := default "" $page.color -}}
+{{- $twitterCard := default "summary" $page.twitterCard -}}
+{{- $refresh := default 0 $page.refreshSeconds -}}
+{{- $additionalMeta := default (list) $page.additionalMeta -}}
+{{- $pageData := dict "title" $title "description" $description "siteName" $siteName "url" $url "imageUrl" $imageUrl "imageAlt" $imageAlt "color" $color "twitterCard" $twitterCard "refresh" $refresh "additionalMeta" $additionalMeta -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dummy-app.fullname" . }}-preview-page
+  labels:
+    {{- include "dummy-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: preview-echo
+data:
+  index.html: |-
+{{ include "dummy-app.previewPage" $pageData | indent 4 }}
+{{- end }}

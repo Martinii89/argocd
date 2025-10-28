@@ -15,6 +15,7 @@ spec:
               revision: HEAD
               directories:
               - path: apps/frontend
+              - path: apps/frontend2
           - list:
               elements:
                 - env: staging
