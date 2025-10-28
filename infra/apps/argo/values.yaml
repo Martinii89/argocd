@@ -13,6 +13,8 @@ argo-cd:
     enabled: false
   applicationSet:
     enabled: true
+  secret:
+    githubSecret: "$webhook-secrets:webhook-secret"
   server:
      insecure: true
      ingress:
