@@ -4,3 +4,6 @@ infisical-standalone:
       repository: infisical/infisical
       tag: "v0.153.1"
       pullPolicy: IfNotPresent
+  ingress:
+    nginx:
+      enabled: false
