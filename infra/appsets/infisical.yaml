@@ -15,8 +15,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: infisical
   syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
     automated: 
       prune: false 
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true      
+      selfHeal: true   
