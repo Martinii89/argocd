@@ -1,15 +1,4 @@
 external-secrets:
-  # Install CRDs as part of the helm chart
-  installCRDs: true
-  
-  # Enable all cluster-scoped CRDs
-  crds:
-    createClusterExternalSecret: true
-    createClusterSecretStore: true
-    createClusterGenerator: true
-    createClusterPushSecret: true
-    createPushSecret: true
-  
   # Resource limits for better resource management
   resources:
     requests:
