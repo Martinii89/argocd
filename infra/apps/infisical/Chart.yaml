@@ -1,0 +1,9 @@
+apiVersion: v2
+name: infisical
+description: Umbrella chart that deploys Infisical
+type: application
+version: 1.0.0
+dependencies:
+  - name: infisical-standalone 
+    version: 1.7.2
+    repository: "https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts"

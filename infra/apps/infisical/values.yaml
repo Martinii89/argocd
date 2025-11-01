@@ -1,0 +1,6 @@
+infisical-standalone:
+  infisical:
+    image:
+      repository: infisical/infisical
+      tag: "v0.153.1"
+      pullPolicy: IfNotPresent
