@@ -1,45 +1,45 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: frontend-app
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-spec:
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
-  generators:
-    - matrix:
-        generators:
-          - git:
-              repoURL: https://github.com/Martinii89/argocd.git
-              revision: HEAD
-              directories:
-              - path: apps/frontend
-          - list:
-              elements:
-                - env: staging
-                  destinationNamespace: dummytest-staging
-                - env: prod
-                  destinationNamespace: dummytest-prod
-  template:
-    metadata:
-      name: '{{.path.basename}}-{{.env}}'
-    spec:
-      project: default
-      source:
-        repoURL: https://github.com/Martinii89/argocd.git
-        targetRevision: HEAD
-        path: '{{.path.path}}'
-        helm:
-          releaseName: '{{.path.basename}}-{{.env}}'
-          valueFiles:
-            - "../../envs/{{.env}}/values/{{.path.basename}}.yaml"
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: "{{.destinationNamespace}}"
-      syncPolicy:
-        automated:
-          selfHeal: true
-          prune: true 
-        syncOptions:
-          - CreateNamespace=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: frontend-app
+#   finalizers:
+#     - resources-finalizer.argocd.argoproj.io
+# spec:
+#   goTemplate: true
+#   goTemplateOptions: ["missingkey=error"]
+#   generators:
+#     - matrix:
+#         generators:
+#           - git:
+#               repoURL: https://github.com/Martinii89/argocd.git
+#               revision: HEAD
+#               directories:
+#               - path: apps/frontend
+#           - list:
+#               elements:
+#                 - env: staging
+#                   destinationNamespace: dummytest-staging
+#                 - env: prod
+#                   destinationNamespace: dummytest-prod
+#   template:
+#     metadata:
+#       name: '{{.path.basename}}-{{.env}}'
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/Martinii89/argocd.git
+#         targetRevision: HEAD
+#         path: '{{.path.path}}'
+#         helm:
+#           releaseName: '{{.path.basename}}-{{.env}}'
+#           valueFiles:
+#             - "../../envs/{{.env}}/values/{{.path.basename}}.yaml"
+#       destination:
+#         server: https://kubernetes.default.svc
+#         namespace: "{{.destinationNamespace}}"
+#       syncPolicy:
+#         automated:
+#           selfHeal: true
+#           prune: true 
+#         syncOptions:
+#           - CreateNamespace=true
