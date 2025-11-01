@@ -1,0 +1,20 @@
+stackgres-operator:
+  # Components to deploy (chart 1.17.x)
+  deploy:
+    operator: true
+    restapi: true
+    collector: true
+
+  # Admin UI service configuration
+  adminui:
+    service:
+      type: ClusterIP
+
+  # Prometheus Operator integration (auto-discovery / autobind)
+  collector:
+    prometheusOperator:
+      allowDiscovery: true
+
+  # Grafana integration (embed dashboards into the UI)
+  grafana:
+    autoEmbed: true

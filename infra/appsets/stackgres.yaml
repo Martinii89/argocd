@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: stackgres
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Martinii89/argocd.git
+    path: infra/apps/stackgres
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stackgres
+  syncPolicy:
+    automated: 
+      prune: false 
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true      

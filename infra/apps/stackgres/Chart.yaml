@@ -1,0 +1,9 @@
+apiVersion: v2
+name: stackgres
+description: Umbrella chart that deploys StackGres operator for PostgreSQL on Kubernetes
+type: application
+version: 1.0.0
+dependencies:
+  - name: stackgres-operator
+    version: 1.17.3
+    repository: https://stackgres.io/downloads/stackgres-k8s/stackgres/helm/
