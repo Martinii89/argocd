@@ -18,3 +18,8 @@ stackgres-operator:
   # Grafana integration (embed dashboards into the UI)
   grafana:
     autoEmbed: true
+
+  # Ensure jobs run after CRDs are installed
+  jobs:
+    annotations:
+      argocd.argoproj.io/sync-wave: "2"
