@@ -1,6 +1,0 @@
-dependencies:
-- name: infisical-standalone
-  repository: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
-  version: 1.7.2
-digest: sha256:5b6b234b0f7cf0c5717b05d8021a5a9ca0b461bcc5b58879475c1009da2e4513
-generated: "2025-11-01T11:49:41.3122963+01:00"
