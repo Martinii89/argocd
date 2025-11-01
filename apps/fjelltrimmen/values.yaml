@@ -58,8 +58,10 @@ service:
 
 # Container environment variables for the main workload.
 env:
-  - name: HOSTNAME
-    value: "0.0.0.0"
+  HOSTNAME:  "0.0.0.0"
+
+envFromSecrets:
+  - fjelltrimmen-secrets
 
 ingress:
   enabled: true
