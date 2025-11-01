@@ -14,13 +14,11 @@ spec:
               repoURL: https://github.com/Martinii89/argocd.git
               revision: HEAD
               directories:
-              - path: apps/frontend
+              - path: apps/fjelltrimmen
           - list:
               elements:
-                - env: staging
-                  destinationNamespace: dummytest-staging
                 - env: prod
-                  destinationNamespace: dummytest-prod
+                  destinationNamespace: fjelltrimmen-prod
   template:
     metadata:
       name: '{{.path.basename}}-{{.env}}'
@@ -31,7 +29,7 @@ spec:
         targetRevision: HEAD
         path: '{{.path.path}}'
         helm:
-          releaseName: '{{.path.basename}}-{{.env}}'
+          releaseName: '{{.path.basename}}'
           valueFiles:
             - "../../envs/{{.env}}/values/{{.path.basename}}.yaml"
       destination:
