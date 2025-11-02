@@ -64,14 +64,14 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
-    - host: rllobby2.martinn.no
+    - host: rllobby.martinn.no
       paths:
         - path: /rllobby(/|$)(.*)
           pathType: ImplementationSpecific
   tls: 
-   - secretName: rllobby2-tls
+   - secretName: rllobby-tls
      hosts:
-       - rllobby2.martinn.no
+       - rllobby.martinn.no
 
 # -- Expose the service via gateway-api HTTPRoute
 # Requires Gateway API resources and suitable controller installed within the cluster
