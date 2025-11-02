@@ -20,5 +20,5 @@ database:
   name: vaultwarden
   user: vaultwarden
   password: vaultwardenpassword
-  host: vaultwarden-db
+  host: vaultwarden-db-rw
   port: 5432
