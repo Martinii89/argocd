@@ -69,14 +69,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
   hosts:
-    - host: fjelltrimmen2.martinn.no
+    - host: fjelltrimmen.martinn.no
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
-   - secretName: fjelltrimmen2-tls
+   - secretName: fjelltrimmen-tls
      hosts:
-       - fjelltrimmen2.martinn.no
+       - fjelltrimmen.martinn.no
 
 # -- Expose the service via gateway-api HTTPRoute
 # Requires Gateway API resources and suitable controller installed within the cluster
