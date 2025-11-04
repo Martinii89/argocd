@@ -1,0 +1,9 @@
+cloudNativePg:
+  enabled: true
+  nameOverride: ""
+  annotations: {}
+  labels: {}
+  spec:
+    instances: 3
+    storage:
+      size: 1Gi
