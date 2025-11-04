@@ -8,27 +8,17 @@ cloudNativePg:
     storage:
       size: 1Gi
     backup:
-      barmanObjectStore:
-        retentionPolicy:
-          keepLast: 7  
-        data:
-          compression: gzip
-          jobs: 2
-        wal:
-          compression: gzip
-          maxParallel: 1
-        destinationPath: s3://fjelltrimmen-postgres-backup
-        endpointURL: https://d78d17cc6cb512f38f10b95fe30338f0.r2.cloudflarestorage.com
-        s3Credentials:
-          accessKeyId:
-            name: r2-secrets
-            key: accessKeyId
-          secretAccessKey:
-            name: r2-secrets
-            key: secretAccessKey
-          region:
-            name: r2-secrets
-            key: region
+      destinationPath: s3://backups/
+      endpointURL: https://d78d17cc6cb512f38f10b95fe30338f0.r2.cloudflarestorage.com
+      s3Credentials:
+        accessKeyId:
+          name: r2-secrets
+          key: accessKeyId
+        secretAccessKey:
+          name: r2-secrets
+          key: secretAccessKey
+      wal:
+        compression: gzip
 envFromSecretKeys:
   - name: DATABASE_URL
     secretName: fjelltrimmen-db-app
