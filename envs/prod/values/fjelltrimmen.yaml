@@ -9,6 +9,12 @@ cloudNativePg:
       size: 1Gi
     backup:
       barmanObjectStore:
+        data:
+          compression: gzip
+          jobs: 2
+        wal:
+          compression: gzip
+          maxParallel: 1
         destinationPath: "s3://fjelltrimmen-postgres-backup/backups/"     # change <bucket> with your bucket's name.
         endpointURL: https://d78d17cc6cb512f38f10b95fe30338f0.r2.cloudflarestorage.com
         s3Credentials:
