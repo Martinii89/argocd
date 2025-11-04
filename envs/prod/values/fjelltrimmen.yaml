@@ -8,17 +8,19 @@ cloudNativePg:
     storage:
       size: 1Gi
     backup:
-      destinationPath: s3://backups/
-      endpointURL: https://d78d17cc6cb512f38f10b95fe30338f0.r2.cloudflarestorage.com
-      s3Credentials:
-        accessKeyId:
-          name: r2-secrets
-          key: accessKeyId
-        secretAccessKey:
-          name: r2-secrets
-          key: secretAccessKey
-      wal:
-        compression: gzip
+      barmanObjectStore:
+        destinationPath: "s3://fjelltrimmen-postgres-backup/backups/"     # change <bucket> with your bucket's name.
+        endpointURL: https://d78d17cc6cb512f38f10b95fe30338f0.r2.cloudflarestorage.com
+        s3Credentials:
+          accessKeyId:
+            name: r2-secrets
+            key: accessKeyId
+          secretAccessKey:
+            name: r2-secrets
+            key: accessSecretKey
+          region:
+            name: r2-secrets
+            key: region
 envFromSecretKeys:
   - name: DATABASE_URL
     secretName: fjelltrimmen-db-app
