@@ -17,7 +17,7 @@ cloudNativePg:
             key: accessKeyId
           secretAccessKey:
             name: r2-secrets
-            key: accessSecretKey
+            key: secretAccessKey
           region:
             name: r2-secrets
             key: region
