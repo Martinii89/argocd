@@ -49,6 +49,13 @@ spec:
             - name: {{ $key }}
               value: {{ quote $value }}
             {{- end }}
+            {{- range .Values.envFromSecretKeys }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .key }}
+            {{- end }}
           envFrom:
             {{- range .Values.envFromSecrets }}
             - secretRef:

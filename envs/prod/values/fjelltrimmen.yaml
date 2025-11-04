@@ -7,3 +7,7 @@ cloudNativePg:
     instances: 3
     storage:
       size: 1Gi
+envFromSecretKeys:
+  - name: DATABASE_URL
+    secretName: fjelltrimmen-db-app
+    key: uri
