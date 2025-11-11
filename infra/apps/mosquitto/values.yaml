@@ -1,0 +1,35 @@
+replicaCount: 1
+
+image:
+  repository: eclipse-mosquitto
+  tag: 2.0.20
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  mqtt:
+    port: 1883
+  websocket:
+    port: 9001
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
+persistence:
+  enabled: false
+
+# Basic anonymous configuration for testing
+# In production, you should enable authentication
+config:
+  mosquitto.conf: |
+    listener 1883
+    allow_anonymous true
+    persistence false
+    log_dest stdout
+    log_type error
+    log_type warning

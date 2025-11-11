@@ -1,0 +1,55 @@
+valkey:
+  # Minimal configuration for pub/sub only
+  architecture: standalone
+  
+  auth:
+    enabled: false  # Disable for testing, enable in production
+  
+  master:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
+    
+    # Single replica
+    count: 1
+    
+    # Disable persistence - not needed for pub/sub
+    persistence:
+      enabled: false
+  
+  # Disable replicas for minimal setup
+  replica:
+    replicaCount: 0
+  
+  # Disable metrics and other extras
+  metrics:
+    enabled: false
+  
+  sentinel:
+    enabled: false
+  
+  # Minimal service
+  service:
+    type: ClusterIP
+    ports:
+      redis: 6379
+  
+  # Use Alpine image for smaller footprint
+  image:
+    registry: docker.io
+    repository: bitnami/valkey
+    tag: 8.0.1-debian-12-r0
+  
+  # Disable unnecessary features
+  commonConfiguration: |-
+    # Disable RDB snapshots (not needed for pub/sub)
+    save ""
+    # Disable AOF
+    appendonly no
+    # Optimize for pub/sub
+    maxmemory 48mb
+    maxmemory-policy noeviction

@@ -1,0 +1,9 @@
+apiVersion: v2
+name: valkey
+description: Valkey (Redis fork) - minimal deployment for pub/sub
+type: application
+version: 1.0.0
+dependencies:
+  - name: valkey
+    version: 1.0.3
+    repository: https://charts.bitnami.com/bitnami

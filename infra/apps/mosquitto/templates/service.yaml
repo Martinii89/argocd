@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mosquitto.fullname" . }}
+  labels:
+    {{- include "mosquitto.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: {{ .Values.service.mqtt.port }}
+    targetPort: mqtt
+    protocol: TCP
+    name: mqtt
+  - port: {{ .Values.service.websocket.port }}
+    targetPort: websocket
+    protocol: TCP
+    name: websocket
+  selector:
+    {{- include "mosquitto.selectorLabels" . | nindent 4 }}

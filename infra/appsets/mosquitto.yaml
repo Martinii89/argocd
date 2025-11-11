@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mosquitto
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Martinii89/argocd.git
+    path: infra/apps/mosquitto
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mosquitto
+  syncPolicy:
+    automated: 
+      prune: false 
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

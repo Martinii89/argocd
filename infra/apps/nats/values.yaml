@@ -1,0 +1,41 @@
+nats:
+  # Minimal resource configuration for small footprint
+  nats:
+    image:
+      repository: nats
+      tag: 2.10.22-alpine
+    
+    # Single replica for minimal setup
+    replicas: 1
+    
+    # Minimal resources
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+    
+    # No JetStream for minimal setup
+    jetstream:
+      enabled: false
+    
+    # Disable features not needed for basic testing
+    logging:
+      debug: false
+      trace: false
+  
+  # Disable extras
+  natsBox:
+    enabled: false
+  
+  exporter:
+    enabled: false
+  
+  reloader:
+    enabled: false
+  
+  # Basic service
+  service:
+    type: ClusterIP
