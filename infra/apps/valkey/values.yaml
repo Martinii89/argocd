@@ -1,10 +1,17 @@
 valkey:
+  # Use Valkey 9 (latest)
+  image:
+    repository: valkey/valkey
+    tag: 9-alpine
+  
   # Minimal configuration for pub/sub only
   architecture: standalone
   
+  # Disable authentication for testing
   auth:
-    enabled: false  # Disable for testing, enable in production
+    enabled: false
   
+  # Single replica
   master:
     resources:
       requests:
@@ -14,9 +21,6 @@ valkey:
         cpu: 100m
         memory: 64Mi
     
-    # Single replica
-    count: 1
-    
     # Disable persistence - not needed for pub/sub
     persistence:
       enabled: false
@@ -25,7 +29,7 @@ valkey:
   replica:
     replicaCount: 0
   
-  # Disable metrics and other extras
+  # Disable metrics and extras
   metrics:
     enabled: false
   
@@ -35,14 +39,6 @@ valkey:
   # Minimal service
   service:
     type: ClusterIP
-    ports:
-      redis: 6379
-  
-  # Use official Alpine image for smallest footprint
-  image:
-    registry: docker.io
-    repository: valkey/valkey
-    tag: 8.0-alpine
   
   # Disable unnecessary features
   commonConfiguration: |-
