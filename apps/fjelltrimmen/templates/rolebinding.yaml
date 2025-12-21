@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "fjelltrimmen.fullname" . }}-job-reader
+  labels:
+    {{- include "fjelltrimmen.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "fjelltrimmen.fullname" . }}-job-reader
+subjects:
+- kind: ServiceAccount
+  name: {{ include "fjelltrimmen.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}

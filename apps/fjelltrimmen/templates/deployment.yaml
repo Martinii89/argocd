@@ -32,6 +32,13 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+        - name: wait-for-migration
+          image: groundnuty/k8s-wait-for:v2.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "job"
+            - "{{ include "fjelltrimmen.fullname" . }}-init-{{ .Values.dbMigration.image.tag | default "latest" | replace "." "-" }}"
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
@@ -48,13 +55,6 @@ spec:
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
               value: {{ quote $value }}
-            {{- end }}
-            {{- range .Values.envFromSecretKeys }}
-            - name: {{ .name }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .secretName }}
-                  key: {{ .key }}
             {{- end }}
           envFrom:
             {{- range .Values.envFromSecrets }}

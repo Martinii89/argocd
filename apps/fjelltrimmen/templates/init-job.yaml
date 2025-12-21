@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "fjelltrimmen.fullname" . }}-init-{{ .Values.dbMigration.image.tag | default "latest" | replace "." "-" }}
+  labels:
+    {{- include "fjelltrimmen.labels" . | nindent 4 }}
+    app.kubernetes.io/component: init-job
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        {{- include "fjelltrimmen.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
+      containers:
+      - name: db-migration
+        image: "{{ .Values.dbMigration.image.repository }}:{{ .Values.dbMigration.image.tag | default "latest" }}"
+        imagePullPolicy: {{ .Values.dbMigration.image.pullPolicy }}
+        {{- if .Values.dbMigration.command }}
+        command: {{ toJson .Values.dbMigration.command }}
+        {{- end }}
+        {{- if .Values.dbMigration.args }}
+        args: {{ toJson .Values.dbMigration.args }}
+        {{- end }}
+        {{- with .Values.dbMigration.env }}
+        env:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}        
+      restartPolicy: {{ default "Never" (.Values.job).restartPolicy }}

@@ -7,11 +7,29 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: ghcr.io/martinii89/nextjs-playground
+  repository: ghcr.io/martinii89/fjelltrimmen
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "main-dd5476d"
+  tag: "latest"
+
+dbMigration:
+  image:
+    repository: ghcr.io/martinii89/fjelltrimmen-dbmigration
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: fjelltrimmen-secrets
+          key: DATABASE_URL 
+
+env:
+  HOSTNAME:  "0.0.0.0"
+
+envFromSecrets:
+  - fjelltrimmen-secrets
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -57,11 +75,6 @@ service:
   port: 80
 
 # Container environment variables for the main workload.
-env:
-  HOSTNAME:  "0.0.0.0"
-
-envFromSecrets:
-  - fjelltrimmen-secrets
 
 ingress:
   enabled: true
@@ -165,13 +178,3 @@ tolerations: []
 
 affinity: {}
 
-# CloudNativePG cluster configuration.
-cloudNativePg:
-  enabled: false
-  nameOverride: ""
-  annotations: {}
-  labels: {}
-  spec:
-    instances: 3
-    storage:
-      size: 1Gi
