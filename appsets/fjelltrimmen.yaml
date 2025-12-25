@@ -19,6 +19,8 @@ spec:
               elements:
                 - env: prod
                   destinationNamespace: fjelltrimmen-prod
+                - env: staging
+                  destinationNamespace: fjelltrimmen-staging
   template:
     metadata:
       name: '{{.path.basename}}-{{.env}}'

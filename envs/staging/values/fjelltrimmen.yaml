@@ -1,0 +1,23 @@
+image:
+  tag: "main-bec91c6"
+
+dbMigration:
+  image:
+    tag: "main-bec91c6"
+
+# Doppler configuration for staging
+doppler:
+  tokenSecretName: doppler-token-staging
+  # TODO: Seal the staging Doppler token and add here
+  encryptedToken: "AgCKsySEIqXTRN3e6q2sdDDdorRFTELoI+DAHGpCRmikjIg/t0UHdVNZZ71GscEPk417lxx2bH+A7+bbzgH/LCmMhjTeqW/78J8NEcnAqh1t86CtYxDOwRO0DUliLnoAzJqr/uYlQIU+629ilN2+3LCaisNvMivMZx+lgJpgSIJg350bgxKDThGbN7ANcy/jXZuRYoSItlQ8k7JYPgygLQUiZjLplnFC7fOoO/zf9Y1AOsUsLQgux5h+W9K96AX6G0S+X8bxbqpNqGiAKyiMlcR31HDougJTJVZMMrvJfYpZIYkIqAwS8rJ7Joexi/2oBcj3VOClv1MT11JGWxh/RtwjQxL9yMESM+deCzL6UcnQKLpF5I5ONCzFaA1PGG4kFdiAG5wSBaQjCe1XptjhuwOdRdXkQKXTblKBpWxDO5QBO8yFrb4qhVeMLfz2QOo9Q25NMVpzL8xH9gpzmuIGmm/9Ve1eyAi4s1bGK/rotZiiPFKZIfkEcxOygPLjLBZbzYwkCKKN3bN7BZrRYuhVi2so04a6afP1tsMbHtfMiMTeRl9CrCIuVSTiSpywy8VDggwjXIMZksw48We6B5iQtHhN5LiHx4hgYdbfGohoDq5Lj5/80GZngSqdJ2ULBF+eXDqb9br+600oUzOtuUcaUrIVaYMDiAkkgInQc0ZGYGbLlnjYQszqFLikiZYxI3DngFqblKUIqTexmxeMmDiEz0EYrHYPO+vOoFJXYOiWBbjXxGzNVMXjSObtHWzoyDlss7wG2+VaYQ=="
+
+ingress:
+  hosts:
+    - host: fjelltrimmen-staging.martinn.no
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: fjelltrimmen-staging-tls
+      hosts:
+        - fjelltrimmen-staging.martinn.no
