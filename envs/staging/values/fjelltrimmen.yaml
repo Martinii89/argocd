@@ -1,9 +1,9 @@
 image:
-  tag: "main-bec91c6"
+  tag: "main-df88fdc"
 
 dbMigration:
   image:
-    tag: "main-bec91c6"
+    tag: "main-df88fdc"
 
 # Doppler configuration for staging
 doppler:
