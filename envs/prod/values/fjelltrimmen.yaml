@@ -1,6 +1,6 @@
 image:
-  tag: "main-6094542"
+  tag: "main-bec91c6"
 
 dbMigration:
   image:
-    tag: "main-48486b0"
+    tag: "main-bec91c6"
