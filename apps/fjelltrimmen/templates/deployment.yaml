@@ -57,6 +57,8 @@ spec:
               value: {{ quote $value }}
             {{- end }}
           envFrom:
+            - secretRef:
+                name: {{ include "fjelltrimmen.secretsName" . }}
             {{- range .Values.envFromSecrets }}
             - secretRef:
                 name: {{ . }}

@@ -4,3 +4,19 @@ image:
 dbMigration:
   image:
     tag: "main-bec91c6"
+
+# Doppler configuration for prod
+doppler:
+  tokenSecretName: doppler-token-prod
+  encryptedToken: AgBlEvX84yxECQJP0p8gmgI4T2Aq3RGtDPoebjjPfLhSsI5/ui1gE7cAT2WWiAfOYaswdqyfP2rqq/+xrUPdFe1XKdbNfCpS8cC4J3TWBRq/81H6MloHpJ7YvfDnCLiaW3gaw+zZk0vbhYbir28HaAzPNXHKnkfOPm/be/cbrvH9kLUBaj9vyHtN2NgjSYxzkjEi6Q1sOBFq6/4N8ZX8/HyPLYxdhUiJPEg4Kx2RgBNZo8iffwuhbHcVT9oCxS40E29WtJNW1WvCY8M7a69YD51FA5Uirqk/K33Tz3Xoz6O9+jK/XRQ+nXF8KBTXaabkttISXmhZovmrgtMoJozHo+Z6rTXzoK1gk61/+6jwo6Z2EvcnOm46AMPNDBQuZUcOwPOgdKO+0kT4N5I4B8bZC72C2q2oXBtFF95HfBsv2T+tefnug/L1X2s6k4SUKPB0xJgPGeeRAuKnc7TdQBVRSqQGLOcLzBSQRsUbeLsgSg2U94+MBrouv+yd4sROZXcChToLRaZOH4i2Bngp3MLIxTPktOC+QLXmXTorijCBOCM2bS0QekYM7exHqxpwXWFg2OWtpysFJsKSX6fMLbkw1FWdjA4C6aPR1T+Eq8QPxJvAFcBAjT+VRKmUT/wzs+3MkA48bDNW54iZua+6Rc7ITq3r81dSu1zAMLJtHmIr6eDgchiDbQLZJReTqOMWN9NGLWf+f6fJRq2iwT4IhC3ruoNNw6kqC/ydGjdG7F6pVaq1s1kYewDfPWkdWzzm/iSe8GosrUlxWA==
+
+ingress:
+  hosts:
+    - host: fjelltrimmen.martinn.no
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: fjelltrimmen-tls
+      hosts:
+        - fjelltrimmen.martinn.no

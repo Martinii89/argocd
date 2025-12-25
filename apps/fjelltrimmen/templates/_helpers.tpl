@@ -69,3 +69,8 @@ Create the name of the service account to use
 {{- printf "%s-db" (include "fjelltrimmen.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
+
+{{/* Return the name of the secrets created by external-secrets */}}
+{{- define "fjelltrimmen.secretsName" -}}
+{{- printf "%s-secrets" (include "fjelltrimmen.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}

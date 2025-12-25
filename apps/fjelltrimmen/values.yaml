@@ -2,6 +2,15 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Doppler External Secrets configuration
+doppler:
+  # Name of the secret containing the Doppler service token
+  tokenSecretName: doppler-token
+  # Key in the secret that contains the token
+  tokenSecretKey: dopplerToken
+  # Sealed/encrypted Doppler service token (override per environment)
+  encryptedToken: ""
+
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
 
@@ -18,18 +27,9 @@ dbMigration:
     repository: ghcr.io/martinii89/fjelltrimmen-dbmigration
     tag: "latest"
     pullPolicy: IfNotPresent
-  env:
-    - name: DATABASE_URL
-      valueFrom:
-        secretKeyRef:
-          name: fjelltrimmen-secrets
-          key: DATABASE_URL 
 
 env:
   HOSTNAME:  "0.0.0.0"
-
-envFromSecrets:
-  - fjelltrimmen-secrets
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: 

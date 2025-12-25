@@ -26,10 +26,15 @@ spec:
         {{- if .Values.dbMigration.args }}
         args: {{ toJson .Values.dbMigration.args }}
         {{- end }}
-        {{- with .Values.dbMigration.env }}
         env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "fjelltrimmen.secretsName" . }}
+                key: DATABASE_URL
+          {{- with .Values.dbMigration.env }}
           {{- toYaml . | nindent 10 }}
-        {{- end }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
