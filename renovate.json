@@ -1,42 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-
   "extends": [
-    "config:base",
-    ":dependencyDashboard",
-    ":semanticCommits"
-  ],
-
-  "enabledManagers": [
-    "helm",
-    "helm-values"
-  ],
-
-  "helm-values": {
-    "enabled": true
-  },
-
-  "packageRules": [
-    {
-      "matchManagers": ["helm"],
-      "groupName": "Helm chart updates",
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": false
-    },
-    {
-      "matchManagers": ["helm"],
-      "matchUpdateTypes": ["major"],
-      "groupName": "Helm chart major updates",
-      "automerge": false
-    },
-    {
-      "matchManagers": ["helm-values"],
-      "groupName": "Container image updates",
-      "matchUpdateTypes": ["patch", "minor"]
-    }
-  ],
-
-  "prCreation": "immediate",
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2
+    "config:recommended"
+  ]
 }
