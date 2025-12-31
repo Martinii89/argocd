@@ -1,9 +1,9 @@
 image:
-  tag: "main-bec91c6"
+  tag: "main-c03e7ae"
 
 dbMigration:
   image:
-    tag: "main-bec91c6"
+    tag: "main-df88fdc"
 
 # Doppler configuration for prod
 doppler:
