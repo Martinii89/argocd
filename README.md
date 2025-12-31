@@ -149,3 +149,7 @@ Rotate credentials by resealing them whenever a value changes. Only the controll
 - [k3s Documentation](https://docs.k3s.io/)
 - [Argo CD Helm Chart](https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd)
 - [Traefik Kubernetes Guide](https://doc.traefik.io/traefik/providers/kubernetes-ingress/)
+
+
+# Set current kubectl context
+`$env:KUBECONFIG = "C:\Projects\k3s-argo\k3s.yaml
