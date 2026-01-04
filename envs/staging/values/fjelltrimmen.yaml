@@ -1,5 +1,5 @@
 image:
-  tag: "main-4fc70b7"
+  tag: "main-4380061"
 
 dbMigration:
   image:
